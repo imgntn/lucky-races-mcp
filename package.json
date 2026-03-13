@@ -1,0 +1,26 @@
+{
+  "name": "@luckyraces/mcp-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "MCP server for Lucky Races — free read tools + x402-gated write tools for AI agents",
+  "main": "dist/index.js",
+  "bin": {
+    "lucky-races-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.8.0"
+  }
+}
