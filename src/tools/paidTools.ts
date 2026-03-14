@@ -12,7 +12,7 @@ export function registerPaidTools(server: McpServer) {
   // ── get_race_data (paid) ────────────────────────────────────
   server.tool(
     "get_race_data",
-    "Query detailed Lucky Races data — specific race results, turn-by-turn replays, individual racer stats. Costs $0.001 USDC via x402.",
+    "Query detailed Lucky Races data — specific race results, turn-by-turn replays, individual racer stats. Costs $0.01 USDC via x402.",
     {
       type: z
         .enum(["race", "replay", "racer", "stats", "leaderboard"])
@@ -34,7 +34,7 @@ export function registerPaidTools(server: McpServer) {
             type: "text",
             text: JSON.stringify({
               error: "x402 payment required",
-              price: "$0.001 USDC",
+              price: "$0.01 USDC",
               network: "Base (eip155:8453)",
               setup: "Set LUCKY_RACES_WALLET_KEY environment variable with a funded wallet",
               details: result.paymentRequired,
@@ -66,7 +66,7 @@ export function registerPaidTools(server: McpServer) {
   // ── enter_race ──────────────────────────────────────────────
   server.tool(
     "enter_race",
-    "Register a bot/agent to join a Lucky Races lobby. Returns a signed entry ticket. Costs $0.01 USDC via x402.",
+    "Register a bot/agent to join a Lucky Races lobby. Returns a signed entry ticket. Costs $0.05 USDC via x402.",
     {
       botAddress: z
         .string()
@@ -94,7 +94,7 @@ export function registerPaidTools(server: McpServer) {
             type: "text",
             text: JSON.stringify({
               error: "x402 payment required",
-              price: "$0.01 USDC",
+              price: "$0.05 USDC",
               network: "Base (eip155:8453)",
               setup: "Set LUCKY_RACES_WALLET_KEY environment variable with a funded wallet",
               details: result.paymentRequired,
@@ -116,7 +116,7 @@ export function registerPaidTools(server: McpServer) {
           type: "text",
           text: JSON.stringify({
             ...(result.data as object),
-            _payment: "paid via x402 ($0.01 USDC)",
+            _payment: "paid via x402 ($0.05 USDC)",
           }, null, 2),
         }],
       };
@@ -126,7 +126,7 @@ export function registerPaidTools(server: McpServer) {
   // ── create_lobby ────────────────────────────────────────────
   server.tool(
     "create_lobby",
-    "Create a new Lucky Races lobby with custom track configuration. Returns an entry ticket for the new lobby. Costs $0.01 USDC via x402.",
+    "Create a new Lucky Races lobby with custom track configuration. Returns an entry ticket for the new lobby. Costs $0.05 USDC via x402.",
     {
       botAddress: z
         .string()
@@ -174,7 +174,7 @@ export function registerPaidTools(server: McpServer) {
             type: "text",
             text: JSON.stringify({
               error: "x402 payment required",
-              price: "$0.01 USDC",
+              price: "$0.05 USDC",
               network: "Base (eip155:8453)",
               setup: "Set LUCKY_RACES_WALLET_KEY environment variable with a funded wallet",
               details: result.paymentRequired,
@@ -196,7 +196,7 @@ export function registerPaidTools(server: McpServer) {
           type: "text",
           text: JSON.stringify({
             ...(result.data as object),
-            _payment: "paid via x402 ($0.01 USDC)",
+            _payment: "paid via x402 ($0.05 USDC)",
             _trackConfig: { length: trackLength, laps, lanes, maxRacers },
           }, null, 2),
         }],

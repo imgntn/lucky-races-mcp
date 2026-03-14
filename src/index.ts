@@ -13,9 +13,9 @@
  *   get_x402_info      — Payment setup instructions
  *
  * Paid tools (x402-gated writes):
- *   get_race_data      — $0.001 USDC — Detailed race/replay/racer queries
- *   enter_race         — $0.01  USDC — Join an existing lobby
- *   create_lobby       — $0.01  USDC — Create a new race lobby
+ *   get_race_data      — $0.01  USDC — Detailed race/replay/racer queries
+ *   enter_race         — $0.05  USDC — Join an existing lobby
+ *   create_lobby       — $0.05  USDC — Create a new race lobby
  *
  * Environment variables:
  *   LUCKY_RACES_URL        — API base URL (default: https://luckyraces.com)

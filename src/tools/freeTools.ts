@@ -119,9 +119,9 @@ export function registerFreeTools(server: McpServer) {
             apiAccess: {
               free: ["get_game_info", "get_race_stats", "get_leaderboard", "list_open_lobbies"],
               paid: {
-                "get_race_data": "$0.001 USDC — query specific race/replay/racer data",
-                "enter_race": "$0.01 USDC — register bot for lobby entry",
-                "create_lobby": "$0.01 USDC — create a new race lobby",
+                "get_race_data": "$0.01 USDC — query specific race/replay/racer data",
+                "enter_race": "$0.05 USDC — register bot for lobby entry",
+                "create_lobby": "$0.05 USDC — create a new race lobby",
               },
               payment: "x402 protocol — USDC on Base",
             },
@@ -184,9 +184,9 @@ export function registerFreeTools(server: McpServer) {
             facilitator: "Coinbase Developer Platform",
             discoveryUrl: "https://luckyraces.com/.well-known/x402.json",
             pricing: {
-              "get_race_data": "$0.001 per query",
-              "enter_race": "$0.01 per entry",
-              "create_lobby": "$0.01 per lobby",
+              "get_race_data": "$0.01 per query",
+              "enter_race": "$0.05 per entry",
+              "create_lobby": "$0.05 per lobby",
             },
             setup: {
               step1: "Set LUCKY_RACES_WALLET_KEY to your wallet's private key (Base network, funded with USDC)",
