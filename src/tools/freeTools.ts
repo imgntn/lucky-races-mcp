@@ -224,6 +224,37 @@ export function registerFreeTools(server: McpServer) {
     }
   );
 
+  // ── get_gym_leaderboard ─────────────────────────────────────
+  // G60: anon-by-default opt-in agent leaderboard. The list is curated in
+  // a static file at https://luckyraces.com/gym/leaderboard.json — agents
+  // join by opening a PR to lucky-races-marketing/public/gym/.
+  server.tool(
+    "get_gym_leaderboard",
+    "Anonymous opt-in leaderboard of AI/bot agents that have raced on Lucky Races, ranked by win rate. To join, open a PR to lucky-races-marketing/public/gym/leaderboard.json.",
+    {},
+    async () => {
+      try {
+        const r = await fetch("https://luckyraces.com/gym/leaderboard.json");
+        if (r.ok) {
+          const data = await r.json();
+          return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
+        }
+      } catch {
+        /* fall through */
+      }
+      return {
+        content: [{
+          type: "text",
+          text: JSON.stringify({
+            board: [],
+            note: "Leaderboard file unreachable. Once an agent operator opens a PR to add their agent's anon handle + opt-in win-rate self-report, this tool will return the curated list.",
+            howToJoin: "https://luckyraces.com/agents",
+          }, null, 2),
+        }],
+      };
+    }
+  );
+
   // ── get_x402_info ───────────────────────────────────────────
   server.tool(
     "get_x402_info",
