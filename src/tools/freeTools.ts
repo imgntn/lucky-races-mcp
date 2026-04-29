@@ -6,6 +6,7 @@
 import { z } from "zod";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { BASE_URL } from "../config.js";
+import { simulateRace } from "../simulate/simulateRace.js";
 
 async function fetchJSON(path: string): Promise<unknown> {
   const res = await fetch(`${BASE_URL}${path}`);
@@ -160,6 +161,62 @@ export function registerFreeTools(server: McpServer) {
             text: JSON.stringify({
               activeLobbies: "unknown",
               note: "Could not fetch live lobby data. The game may be between seasons.",
+            }, null, 2),
+          }],
+        };
+      }
+    }
+  );
+
+  // ── simulate_race ──────────────────────────────────────────
+  // Free, server-side mock simulation. Lets agents try strategies without
+  // entering a real race. Mirrors the in-board mockEngine's tick math.
+  server.tool(
+    "simulate_race",
+    "Simulate a Lucky Races race in-process with chosen racer stats and strategies. Free, no payment, no chain. Use this to test strategies before paying for enter_race.",
+    {
+      laps: z.number().int().min(1).max(5).default(2),
+      lanes: z.number().int().min(2).max(5).default(3),
+      spaces: z.number().int().min(20).max(60).default(30),
+      seed: z.number().int().default(42),
+      racers: z.array(z.object({
+        id: z.number().int(),
+        speed: z.number().int().min(1).max(10),
+        acceleration: z.number().int().min(1).max(10),
+        handling: z.number().int().min(1).max(10),
+        strategy: z.enum([
+          "aggressive", "defensive", "balanced", "chaotic",
+          "sniper", "turtle", "opportunist",
+        ]).default("balanced"),
+      })).min(2).max(8),
+    },
+    async ({ laps, lanes, spaces, seed, racers }) => {
+      const result = simulateRace({ laps, lanes, spaces, seed, racers });
+      return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    }
+  );
+
+  // ── get_race_replay ────────────────────────────────────────
+  // Free read of completed-race public data via /api/x402/race-data
+  // (this endpoint is read-only and price-zero from the marketing
+  // analytics pipeline; the paid get_race_data tool exposes deeper
+  // detail).
+  server.tool(
+    "get_race_replay",
+    "Fetch the public turn-by-turn replay summary for a completed race. Free; for full state and per-tick item history, use get_race_data (paid).",
+    { raceId: z.string().describe("Race id (uint256 as string)") },
+    async ({ raceId }) => {
+      try {
+        const data = await fetchJSON(`/api/x402/race-data?type=replay&id=${encodeURIComponent(raceId)}&summary=1`);
+        return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
+      } catch {
+        return {
+          content: [{
+            type: "text",
+            text: JSON.stringify({
+              error: "Replay summary unavailable",
+              hint: "Check the race id, or use get_race_data (paid) for the full record.",
+              raceId,
             }, null, 2),
           }],
         };
