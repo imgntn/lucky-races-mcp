@@ -203,4 +203,72 @@ export function registerPaidTools(server: McpServer) {
       };
     }
   );
+
+  // ── submit_turn_choices (paid) ─────────────────────────────
+  // G55: agents play full races, not just enter.
+  server.tool(
+    "submit_turn_choices",
+    "Submit a turn for an active Lucky Races bot. Card choices: speed, lane, item, shield, projectile, blockDrafters. Costs $0.05 USDC via x402.",
+    {
+      raceId: z.string().describe("Active race id"),
+      racerId: z.string().describe("Racer token id you're submitting for"),
+      speedMode: z.enum(["cruise", "push", "overdrive"]).default("cruise"),
+      newLane: z.number().int().min(0).max(4).optional(),
+      itemIndex: z.number().int().min(0).optional(),
+      useShield: z.boolean().default(false),
+      projectileLane: z.number().int().min(0).max(4).optional(),
+      blockDrafters: z.boolean().default(false),
+    },
+    async (args) => {
+      const result = await x402Fetch("/api/x402/submit-turn", {
+        method: "POST",
+        body: JSON.stringify(args),
+      });
+      if (result.paymentRequired) {
+        return {
+          content: [{ type: "text", text: JSON.stringify({ error: "x402 payment required", price: "$0.05 USDC", details: result.paymentRequired }, null, 2) }],
+          isError: true,
+        };
+      }
+      if (result.error) {
+        return {
+          content: [{ type: "text", text: JSON.stringify({ error: result.error }, null, 2) }],
+          isError: true,
+        };
+      }
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ...(result.data as object), _payment: "paid via x402 ($0.05 USDC)" }, null, 2) }],
+      };
+    }
+  );
+
+  // ── get_my_inventory (paid) ────────────────────────────────
+  // G56: agents that own racers want to see their items.
+  server.tool(
+    "get_my_inventory",
+    "Get the current item inventory for a specific racer in an active race. Costs $0.01 USDC via x402.",
+    {
+      raceId: z.string().describe("Active race id"),
+      racerId: z.string().describe("Racer token id you own"),
+    },
+    async ({ raceId, racerId }) => {
+      const params = new URLSearchParams({ type: "inventory", raceId, racerId });
+      const result = await x402Fetch(`/api/x402/race-data?${params}`);
+      if (result.paymentRequired) {
+        return {
+          content: [{ type: "text", text: JSON.stringify({ error: "x402 payment required", price: "$0.01 USDC", details: result.paymentRequired }, null, 2) }],
+          isError: true,
+        };
+      }
+      if (result.error) {
+        return {
+          content: [{ type: "text", text: JSON.stringify({ error: result.error }, null, 2) }],
+          isError: true,
+        };
+      }
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ...(result.data as object), _payment: "paid via x402 ($0.01 USDC)" }, null, 2) }],
+      };
+    }
+  );
 }
