@@ -8,6 +8,7 @@
     "lucky-races-mcp": "dist/index.js"
   },
   "scripts": {
+    "ci:local": "node scripts/local-ci.mjs",
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/index.js"
