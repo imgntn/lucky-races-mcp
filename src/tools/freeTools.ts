@@ -284,7 +284,7 @@ export function registerFreeTools(server: McpServer) {
             testnet: {
               note: "For testing, use Base Sepolia with the x402.org facilitator",
               network: "eip155:84532",
-              env: "LUCKY_RACES_NETWORK=base-sepolia LUCKY_RACES_URL=https://lucky-races-staging-production.up.railway.app",
+              env: "LUCKY_RACES_NETWORK=base-sepolia LUCKY_RACES_URL=https://luckyraces.com",
             },
           }, null, 2),
         }],
