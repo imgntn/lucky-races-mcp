@@ -30,7 +30,7 @@ import { registerPaidTools } from "./tools/paidTools.js";
 
 const server = new McpServer({
   name: "lucky-races",
-  version: "1.0.0",
+  version: "1.1.0",
 });
 
 // Register all tools

@@ -6,5 +6,6 @@
  */
 
 export const BASE_URL = process.env.LUCKY_RACES_URL || "https://luckyraces.com";
+export const GAMEPLAY_URL = process.env.LUCKY_RACES_GAMEPLAY_URL || "https://custody-api.racerverse.com";
 export const WALLET_PRIVATE_KEY = process.env.LUCKY_RACES_WALLET_KEY || "";
 export const X402_NETWORK = process.env.LUCKY_RACES_NETWORK || "base-mainnet";
